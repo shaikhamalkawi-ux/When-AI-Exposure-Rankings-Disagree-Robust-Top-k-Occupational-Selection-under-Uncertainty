@@ -1,4 +1,4 @@
-name: Build final paper
+name: Recover staged author sources
 
 on:
   push:
@@ -11,109 +11,60 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  recover:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
-      - name: Reconstruct authoritative author-final sources
+      - name: Recover staged files
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p source reproducibility/data reproducibility/generated \
-            reproducibility/reference_outputs/screened reproducibility/reference_outputs/unscreened
-          cat > /tmp/decode_parts.py <<'PY'
+          mkdir -p source reproducibility/data
+          cat > /tmp/recover.py <<'PY'
           import base64, glob, sys, zlib
           pattern, target = sys.argv[1], sys.argv[2]
           paths = sorted(glob.glob(pattern))
           if not paths:
-              raise SystemExit(f'No parts for {pattern}')
-          text = ''.join(open(p, 'r', encoding='utf-8').read().strip() for p in paths)
+              print('missing', pattern); raise SystemExit(0)
+          text = ''.join(open(p, encoding='utf-8').read().strip() for p in paths)
           data = base64.b64decode(text)
           if data[:3] != b'\x1f\x8b\x08':
-              raise SystemExit(f'Not gzip data: {pattern}')
-          flags = data[3]
-          i = 10
+              print('not gzip', pattern); raise SystemExit(0)
+          flags=data[3]; i=10
           if flags & 4:
-              n = int.from_bytes(data[i:i+2], 'little'); i += 2 + n
-          if flags & 8:
-              i = data.index(b'\0', i) + 1
-          if flags & 16:
-              i = data.index(b'\0', i) + 1
-          if flags & 2:
-              i += 2
-          dec = zlib.decompressobj(-zlib.MAX_WBITS)
-          out = dec.decompress(data[i:]) + dec.flush()
-          if not dec.eof:
-              raise SystemExit(f'Deflate stream incomplete: {pattern}')
-          open(target, 'wb').write(out)
-          print(f'{target}: {len(out)} bytes from {len(paths)} part(s)')
+              n=int.from_bytes(data[i:i+2],'little'); i += 2+n
+          if flags & 8: i=data.index(b'\0',i)+1
+          if flags & 16: i=data.index(b'\0',i)+1
+          if flags & 2: i += 2
+          d=zlib.decompressobj(-15); out=bytearray(); pos=i; err=None
+          while pos < len(data):
+              chunk=data[pos:pos+64]; pos += len(chunk)
+              try: out.extend(d.decompress(chunk))
+              except zlib.error as e:
+                  err=e; break
+              if d.eof: break
+          try: out.extend(d.flush())
+          except zlib.error as e: err=err or e
+          open(target,'wb').write(out)
+          print(f'{target}: recovered={len(out)} compressed_pos={pos}/{len(data)} eof={d.eof} error={err}')
           PY
-          decode_parts() { python /tmp/decode_parts.py "$1" "$2"; }
-          decode_parts '_bootstrap/main_tex.part*' 'source/main.tex'
-          decode_parts '_bootstrap/supplement_tex.part*' 'source/supplement.tex'
-          decode_parts '_bootstrap/priority_matrix.part*' 'reproducibility/data/BeyondAIR_Primitive_Scenario_Priority_Matrix_661x18.csv'
-          decode_parts '_bootstrap/interval_ledger.part*' 'reproducibility/data/BeyondAIR_Interval_Core_Ledger_661.csv'
-          decode_parts '_bootstrap/scenario_register.part*' 'reproducibility/data/BeyondAIR_Scenario_Register_18.csv'
-          decode_parts '_bootstrap/reproduce_py.part*' 'reproducibility/reproduce_beyondair.py'
-          decode_parts '_bootstrap/repro_readme.part*' 'reproducibility/README.md'
-          decode_parts '_bootstrap/repro_validation.part*' 'reproducibility/VALIDATION.txt'
-          chmod +x reproducibility/reproduce_beyondair.py
-          test -s source/main.tex
-          test -s source/supplement.tex
-          test -s reproducibility/data/BeyondAIR_Primitive_Scenario_Priority_Matrix_661x18.csv
-          test -s reproducibility/data/BeyondAIR_Interval_Core_Ledger_661.csv
-
-      - name: Install scientific Python dependencies
-        run: python -m pip install --upgrade pip numpy pandas scipy matplotlib
-
-      - name: Reproduce screened and unscreened results
+          python /tmp/recover.py '_bootstrap/main_tex.part*' source/main.tex
+          python /tmp/recover.py '_bootstrap/supplement_tex.part*' source/supplement.tex
+          python /tmp/recover.py '_bootstrap/priority_matrix.part*' reproducibility/data/BeyondAIR_Primitive_Scenario_Priority_Matrix_661x18.csv
+          python /tmp/recover.py '_bootstrap/interval_ledger.part*' reproducibility/data/BeyondAIR_Interval_Core_Ledger_661.csv
+          python /tmp/recover.py '_bootstrap/scenario_register.part*' reproducibility/data/BeyondAIR_Scenario_Register_18.csv
+          python /tmp/recover.py '_bootstrap/reproduce_py.part*' reproducibility/reproduce_beyondair.py
+          python /tmp/recover.py '_bootstrap/repro_readme.part*' reproducibility/README.md
+          python /tmp/recover.py '_bootstrap/repro_validation.part*' reproducibility/VALIDATION.txt
+      - name: Commit recovered files
         shell: bash
         run: |
           set -euo pipefail
-          cd reproducibility
-          rm -rf generated/* reference_outputs/screened/* reference_outputs/unscreened/*
-          python reproduce_beyondair.py > generated/reproduction_run.txt
-          cp -a generated/. reference_outputs/screened/
-          python reproduce_beyondair.py --unscreened > generated/reproduction_run.txt
-          cp -a generated/. reference_outputs/unscreened/
-          python reproduce_beyondair.py > generated/reproduction_run.txt
-          find . -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS.txt
-          sha256sum -c SHA256SUMS.txt
-
-      - name: Build figures
-        run: python source/build_figures.py
-
-      - name: Install LaTeX
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y latexmk texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-publishers lmodern poppler-utils
-
-      - name: Compile main and supplement
-        shell: bash
-        run: |
-          set -euo pipefail
-          cd source
-          latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
-          latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
-          mkdir -p ../paper
-          cp main.pdf ../paper/When_AI_Exposure_Rankings_Disagree_Main.pdf
-          cp supplement.pdf ../paper/When_AI_Exposure_Rankings_Disagree_Supplement.pdf
-          pdfunite main.pdf supplement.pdf ../paper/When_AI_Exposure_Rankings_Disagree_Main_and_Supplement.pdf
-          cd ..
-          sha256sum paper/*.pdf > GITHUB_BUILD_SHA256.txt
-
-      - name: Commit reconstructed research package
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -rf _bootstrap
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -A
-          git commit -m 'Build final author manuscript and reproducibility package'
+          git add source/main.tex source/supplement.tex reproducibility
+          git commit -m 'Recover staged final author sources for integrity repair' || true
           git push
