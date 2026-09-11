@@ -1,0 +1,2 @@
+k,scenario_count,rule,cutoff_25th_count,cutoff_26th_count,mean_capture,minimum_capture,maximum_relative_regret,box_absolute_regret,overlap_with_relative_minimax,consensus_only_soc,relative_minimax_only_soc,worst_scenario
+25,18,Select the 25 largest scenario-specific Top-25 occurrence counts; break equal counts by ascending SOC.,9,8,0.9700497327168492,0.9589201511773436,0.04107984882265636,0.019521357256671597,24,['35-9031'],['39-3091'],Microsoft_ai_nonphysical__leave_learning_strategies_out
