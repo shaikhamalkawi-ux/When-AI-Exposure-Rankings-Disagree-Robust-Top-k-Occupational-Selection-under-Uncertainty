@@ -1,0 +1,95 @@
+\documentclass[10pt]{article}
+\usepackage[margin=0.7in]{geometry}
+\usepackage{amsmath,amssymb,booktabs,array,longtable,url}
+\usepackage[T1]{fontenc}\usepackage{lmodern}\usepackage{microtype}
+\newcommand{\ind}{\mathbf{1}}
+\title{Supplementary Material\\\large When AI Exposure Rankings Disagree: Robust Top-25 Selection Across 661 U.S. Occupations}
+\author{Ghassan Malkawi; Ahmed Abdelaziz Elsayed; Asem Omari\\Azmi Alazzam; Said Badreddine; Shaima Alharthi}
+\date{}
+\begin{document}\maketitle
+\section*{S1. Input and scenario register}
+The 18 primitive priority vectors are the Cartesian product of three exposure channels and six constructions. For occupation $i$ and design $t$, priority is $p_i^t=s_iq_i^t$, where $s_i$ is May 2025 OEWS employment share. The priority box is $\ell_i=\min_t p_i^t$, $u_i=\max_t p_i^t$; the point core is $c_i=p_i^{\mathrm{AIOE,equal-five}}$, so $\ell_i\le c_i\le u_i$ for every occupation.
+\begin{table}[h]\centering\small
+\caption{Primitive scenario construction.}
+\begin{tabular}{p{.23\textwidth}p{.68\textwidth}}\toprule Axis&Admitted levels\\\midrule
+Exposure channel&AIOE; Microsoft user-goal; Microsoft AI-action/nonphysical\\
+Construction&equal-five; leave Critical Thinking out; leave Active Learning out; leave Learning Strategies out; leave Active Listening out; leave Speaking out\\\bottomrule\end{tabular}
+\end{table}
+
+\section*{S2. Membership counts and the 14 stable occupations}
+\begin{table}[h]\centering\small
+\caption{Membership counts by selection size.}
+\begin{tabular}{rrrrr}\toprule $k$&Scenario intersection&Scenario union&Box guaranteed&Box possible\\\midrule
+10&7&16&2&43\\25&14&37&4&87\\50&32&73&14&159\\100&68&135&27&244\\\bottomrule\end{tabular}
+\end{table}
+At $k=25$, the 14 occupations present in every coherent Top-25 are:
+\begin{enumerate}\small
+\item General and Operations Managers;
+\item Accountants and Auditors;
+\item Registered Nurses;
+\item Waiters and Waitresses;
+\item Janitors and Cleaners, Except Maids and Housekeeping Cleaners;
+\item Cashiers;
+\item Retail Salespersons;
+\item Sales Representatives, Wholesale and Manufacturing, Except Technical and Scientific Products;
+\item Bookkeeping, Accounting, and Auditing Clerks;
+\item Receptionists and Information Clerks;
+\item Secretaries and Administrative Assistants, Except Legal, Medical, and Executive;
+\item Office Clerks, General;
+\item Heavy and Tractor-Trailer Truck Drivers;
+\item Stockers and Order Fillers.
+\end{enumerate}
+These are stable screening priorities within the declared 18-specification family; the result is not a displacement or program recommendation.
+
+\section*{S3. Exact rank proof and tie convention}
+Best rank is existential:
+\[r_i^{\min}=1+\sum_{j\ne i}\ind\{\ell_j>u_i\}.\]
+Worst rank is pessimistic:
+\[r_i^{\max}=1+\sum_{j\ne i}\ind\{u_j\ge\ell_i\}.\]
+Possible membership is $r_i^{\min}\le k$ and guaranteed membership is $r_i^{\max}\le k$. The strict/non-strict distinction controls boundary inclusion in the contraction analysis.
+
+\section*{S4. Safe-screening proof detail}
+Let $G=\{i:r_i^{\max}\le k\}$ and $Z=\{i:r_i^{\min}>k\}$. To insert $g\in G$, a size-$k$ list omitting it contains an $h$ with $u_h<\ell_g$, and replacement weakly increases every scenario-wise selected mass. If $i\in Z$ is selected, at least $k$ competitors satisfy $\ell_j>u_i$, so some omitted $j$ strictly dominates $i$ in every scenario. Each such exchange strictly increases every scenario-wise selected mass; because the family of size-$k$ lists is finite, cycling is impossible. Therefore an optimum exists containing $G$ and excluding $Z$ for any minimization objective coordinatewise nonincreasing in scenario-wise selected mass.
+
+\section*{S5. Fixed-list verification and criterion sensitivity}
+\begin{table}[h]\centering\small
+\caption{Fixed-list comparison at $k=25$ over 18 primitive scenarios.}
+\begin{tabular}{lrrrr}\toprule Rule&Mean capture&Minimum capture&Max. rel. regret&Box regret\\\midrule
+Scale only&93.02\%&88.35\%&11.65\%&0.0238\\
+Baseline composite&96.14\%&93.70\%&6.30\%&0.0181\\
+Relative minimax&96.99\%&96.52\%&3.48\%&0.0195\\\bottomrule\end{tabular}
+\end{table}
+The relative-minimax objective is $\max_t R_t(x)$ with $R_t(x)=1-\sum_i p_i^t x_i/V_t^\star$. The absolute-minimax sensitivity instead defines
+\[R_t^{\mathrm{abs}}(x)=V_t^\star-\sum_i p_i^t x_i,\qquad \min_{x:\sum_i x_i=k}\max_tR_t^{\mathrm{abs}}(x).\]
+Its list overlaps the relative-minimax list in 23/25 occupations, with minimum relative capture 94.79\% and maximum relative regret 5.21\%.
+
+\section*{S6. Nested-support sensitivity and exact boundary semantics}
+For retained width $g\in[0,1]$,
+\[[L_i(g),U_i(g)]=[c_i-g(c_i-\ell_i),\;c_i+g(u_i-c_i)].\]
+\begin{table}[h]\centering\small
+\caption{Structural Top-25 transition boundaries.}
+\begin{tabular}{lrrp{.34\textwidth}}\toprule Event&$g^\star$&$1-g^\star$&Identity check\\\midrule
+Guaranteed $\to14$&0.5743200867&0.4256799133&coherent-intersection set after crossing\\
+Possible $\to37$&0.4346510223&0.5653489777&cardinality only; 32 shared\\
+Full 25/25&0.0787564209&0.9212435791&point list\\\bottomrule\end{tabular}
+\end{table}
+These values are transition boundaries. Under the stated tie convention, the post-contraction state applies for $g<g^\star$ when contraction proceeds downward from $g=1$; equality is evaluated by the original strict $>$ and non-strict $\ge$ rules rather than by rounded prose labels.
+
+At the 37-member boundary, the five possible-set-only occupations are Computer and Information Systems Managers (11-3021), Medical Assistants (31-9092), Billing and Posting Clerks (43-3021), First-Line Supervisors of Construction Trades and Extraction Workers (47-1011), and Inspectors, Testers, Sorters, Samplers, and Weighers (51-9061). The five coherent-union-only occupations are Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop (35-9031), Amusement and Recreation Attendants (39-3091), Counter and Rental Clerks (41-2021), Production, Planning, and Expediting Clerks (43-5061), and First-Line Supervisors of Production and Operating Workers (51-1011).
+
+For a strictly decreasing homeomorphism $\phi:[0,1]\to[0,1]$ with $\phi(0)=1$, $\phi(1)=0$, set $g=\phi(\alpha)$. Linear $\phi(\alpha)=1-\alpha$ and quadratic $\phi(\alpha)=(1-\alpha)^2$ relabel the same support family and cannot constitute independent robustness tests.
+
+\section*{S7. Secondary SIPP diagnostic and claim boundary}
+A separate descriptive diagnostic compares the three Top-25 lists with a fixed 17-occupation target set. The scale-only list contains one target with outgoing SIPP support and captures 50.05\% of target-origin weighted outgoing mass. Baseline composite and relative minimax each contain two supported targets and each capture 66.39\%. These are descriptive overlaps only; they do not estimate out-of-sample regret, worker transition probability, AI causality, or program success.
+
+\begin{table}[h]\centering\small
+\caption{Permitted and unsupported interpretations.}
+\begin{tabular}{p{.25\textwidth}p{.36\textwidth}p{.31\textwidth}}\toprule Output&Permitted&Unsupported\\\midrule
+Box membership&Exact membership under independent priority intervals&Probability of selection\\
+Coherent intersection/union&Membership over 18 admitted designs&Universal robustness\\
+Relative-minimax list&Best worst relative capture over declared scenarios&Optimal workforce policy\\
+Box regret&Exact absolute regret under independent priority intervals&Dominance under coherent designs\\
+Boundary $g^\star$&Width at which rank-comparison status can change&Confidence or calibrated possibility\\
+SIPP overlap&Descriptive coverage of external target set&Validation or transition probability\\\bottomrule\end{tabular}
+\end{table}
+\end{document}

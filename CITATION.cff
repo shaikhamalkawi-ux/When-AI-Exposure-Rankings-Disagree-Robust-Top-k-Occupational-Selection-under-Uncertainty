@@ -1,7 +1,7 @@
 cff-version: 1.2.0
 message: "If you use this repository, please cite the accompanying paper."
 title: "When AI Exposure Rankings Disagree: Robust Top-25 Selection Across 661 U.S. Occupations"
-type: software
+type: article
 authors:
   - family-names: Malkawi
     given-names: Ghassan

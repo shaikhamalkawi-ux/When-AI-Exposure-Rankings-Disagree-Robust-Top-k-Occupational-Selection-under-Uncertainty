@@ -1,70 +1,61 @@
-name: Recover staged author sources
+name: Build paper
 
 on:
   push:
     branches: [main]
     paths:
-      - '_bootstrap/READY'
+      - 'source/**'
       - '.github/workflows/build-paper.yml'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  recover:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Recover staged files
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade pip matplotlib
+
+      - name: Build manuscript figures
+        run: python source/build_figures.py
+
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y latexmk texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-publishers lmodern poppler-utils
+
+      - name: Compile main and supplement
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p source reproducibility/data
-          cat > /tmp/recover.py <<'PY'
-          import base64, glob, sys, zlib
-          pattern, target = sys.argv[1], sys.argv[2]
-          paths = sorted(glob.glob(pattern))
-          if not paths:
-              print('missing', pattern); raise SystemExit(0)
-          text = ''.join(open(p, encoding='utf-8').read().strip() for p in paths)
-          data = base64.b64decode(text)
-          if data[:3] != b'\x1f\x8b\x08':
-              print('not gzip', pattern); raise SystemExit(0)
-          flags=data[3]; i=10
-          if flags & 4:
-              n=int.from_bytes(data[i:i+2],'little'); i += 2+n
-          if flags & 8: i=data.index(b'\0',i)+1
-          if flags & 16: i=data.index(b'\0',i)+1
-          if flags & 2: i += 2
-          d=zlib.decompressobj(-15); out=bytearray(); pos=i; err=None
-          while pos < len(data):
-              chunk=data[pos:pos+64]; pos += len(chunk)
-              try: out.extend(d.decompress(chunk))
-              except zlib.error as e:
-                  err=e; break
-              if d.eof: break
-          try: out.extend(d.flush())
-          except zlib.error as e: err=err or e
-          open(target,'wb').write(out)
-          print(f'{target}: recovered={len(out)} compressed_pos={pos}/{len(data)} eof={d.eof} error={err}')
-          PY
-          python /tmp/recover.py '_bootstrap/main_tex.part*' source/main.tex
-          python /tmp/recover.py '_bootstrap/supplement_tex.part*' source/supplement.tex
-          python /tmp/recover.py '_bootstrap/priority_matrix.part*' reproducibility/data/BeyondAIR_Primitive_Scenario_Priority_Matrix_661x18.csv
-          python /tmp/recover.py '_bootstrap/interval_ledger.part*' reproducibility/data/BeyondAIR_Interval_Core_Ledger_661.csv
-          python /tmp/recover.py '_bootstrap/scenario_register.part*' reproducibility/data/BeyondAIR_Scenario_Register_18.csv
-          python /tmp/recover.py '_bootstrap/reproduce_py.part*' reproducibility/reproduce_beyondair.py
-          python /tmp/recover.py '_bootstrap/repro_readme.part*' reproducibility/README.md
-          python /tmp/recover.py '_bootstrap/repro_validation.part*' reproducibility/VALIDATION.txt
-      - name: Commit recovered files
+          cd source
+          latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+          latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
+          mkdir -p ../paper
+          cp main.pdf ../paper/When_AI_Exposure_Rankings_Disagree_Main.pdf
+          cp supplement.pdf ../paper/When_AI_Exposure_Rankings_Disagree_Supplement.pdf
+          pdfunite main.pdf supplement.pdf ../paper/When_AI_Exposure_Rankings_Disagree_Main_and_Supplement.pdf
+          cd ..
+          sha256sum paper/*.pdf > GITHUB_BUILD_SHA256.txt
+          ! grep -E 'Overfull \\hbox|Overfull \\vbox|undefined references|undefined citation' source/main.log
+          ! grep -E 'Overfull \\hbox|Overfull \\vbox|undefined references|undefined citation' source/supplement.log
+
+      - name: Commit generated PDFs and figures
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add source/main.tex source/supplement.tex reproducibility
-          git commit -m 'Recover staged final author sources for integrity repair' || true
-          git push
+          git add paper source/figures GITHUB_BUILD_SHA256.txt
+          if ! git diff --cached --quiet; then
+            git commit -m 'Build final author manuscript PDFs'
+            git push
+          fi
