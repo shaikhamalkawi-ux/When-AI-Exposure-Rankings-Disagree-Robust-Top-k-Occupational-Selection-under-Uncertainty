@@ -26,11 +26,34 @@ jobs:
           set -euo pipefail
           mkdir -p source reproducibility/data reproducibility/generated \
             reproducibility/reference_outputs/screened reproducibility/reference_outputs/unscreened
-          decode_parts() {
-            local pattern="$1"
-            local target="$2"
-            cat $pattern | base64 --decode | gzip -dc > "$target"
-          }
+          cat > /tmp/decode_parts.py <<'PY'
+          import base64, glob, sys, zlib
+          pattern, target = sys.argv[1], sys.argv[2]
+          paths = sorted(glob.glob(pattern))
+          if not paths:
+              raise SystemExit(f'No parts for {pattern}')
+          text = ''.join(open(p, 'r', encoding='utf-8').read().strip() for p in paths)
+          data = base64.b64decode(text)
+          if data[:3] != b'\x1f\x8b\x08':
+              raise SystemExit(f'Not gzip data: {pattern}')
+          flags = data[3]
+          i = 10
+          if flags & 4:
+              n = int.from_bytes(data[i:i+2], 'little'); i += 2 + n
+          if flags & 8:
+              i = data.index(b'\0', i) + 1
+          if flags & 16:
+              i = data.index(b'\0', i) + 1
+          if flags & 2:
+              i += 2
+          dec = zlib.decompressobj(-zlib.MAX_WBITS)
+          out = dec.decompress(data[i:]) + dec.flush()
+          if not dec.eof:
+              raise SystemExit(f'Deflate stream incomplete: {pattern}')
+          open(target, 'wb').write(out)
+          print(f'{target}: {len(out)} bytes from {len(paths)} part(s)')
+          PY
+          decode_parts() { python /tmp/decode_parts.py "$1" "$2"; }
           decode_parts '_bootstrap/main_tex.part*' 'source/main.tex'
           decode_parts '_bootstrap/supplement_tex.part*' 'source/supplement.tex'
           decode_parts '_bootstrap/priority_matrix.part*' 'reproducibility/data/BeyondAIR_Primitive_Scenario_Priority_Matrix_661x18.csv'
