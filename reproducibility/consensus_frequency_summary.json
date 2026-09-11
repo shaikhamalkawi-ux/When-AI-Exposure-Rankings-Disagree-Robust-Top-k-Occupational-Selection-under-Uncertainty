@@ -1,0 +1,15 @@
+{
+  "k": 25,
+  "scenario_count": 18,
+  "rule": "Select the 25 largest scenario-specific Top-25 occurrence counts; break equal counts by ascending SOC.",
+  "cutoff_25th_count": 9,
+  "cutoff_26th_count": 8,
+  "mean_capture": 0.9700497327168492,
+  "minimum_capture": 0.9589201511773436,
+  "maximum_relative_regret": 0.04107984882265636,
+  "box_absolute_regret": 0.019521357256671597,
+  "overlap_with_relative_minimax": 24,
+  "consensus_only_soc": ["35-9031"],
+  "relative_minimax_only_soc": ["39-3091"],
+  "worst_scenario": "Microsoft_ai_nonphysical__leave_learning_strategies_out"
+}
