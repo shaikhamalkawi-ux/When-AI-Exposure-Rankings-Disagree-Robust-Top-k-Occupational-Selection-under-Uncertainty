@@ -1,7 +1,7 @@
 from pathlib import Path
 
-def rep(s,a,b):
-    return s.replace(a,b)
+def rep(s,a,b,count=-1):
+    return s.replace(a,b,count)
 
 p=Path('source/main.tex')
 s=p.read_text()
