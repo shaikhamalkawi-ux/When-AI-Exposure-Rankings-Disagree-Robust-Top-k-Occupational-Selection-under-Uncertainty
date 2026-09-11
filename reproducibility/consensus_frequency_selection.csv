@@ -1,0 +1,26 @@
+SOC,Occupation,scenario_top25_count,scenario_top25_fraction,in_relative_minimax
+11-1021,General and Operations Managers,18,1.0,True
+13-2011,Accountants and Auditors,18,1.0,True
+29-1141,Registered Nurses,18,1.0,True
+35-3031,Waiters and Waitresses,18,1.0,True
+37-2011,"Janitors and Cleaners, Except Maids and Housekeeping Cleaners",18,1.0,True
+41-2011,Cashiers,18,1.0,True
+41-2031,Retail Salespersons,18,1.0,True
+41-4012,"Sales Representatives, Wholesale and Manufacturing, Except Technical and Scientific Products",18,1.0,True
+43-3031,"Bookkeeping, Accounting, and Auditing Clerks",18,1.0,True
+43-4171,Receptionists and Information Clerks,18,1.0,True
+43-6014,"Secretaries and Administrative Assistants, Except Legal, Medical, and Executive",18,1.0,True
+43-9061,"Office Clerks, General",18,1.0,True
+53-3032,Heavy and Tractor-Trailer Truck Drivers,18,1.0,True
+53-7065,Stockers and Order Fillers,18,1.0,True
+13-1111,Management Analysts,17,0.9444444444444444,True
+43-1011,First-Line Supervisors of Office and Administrative Support Workers,14,0.7777777777777778,True
+13-1071,Human Resources Specialists,12,0.6666666666666666,True
+15-1232,Computer User Support Specialists,12,0.6666666666666666,True
+33-9032,Security Guards,12,0.6666666666666666,True
+35-2014,"Cooks, Restaurant",12,0.6666666666666666,True
+35-9031,"Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop",12,0.6666666666666666,False
+41-1011,First-Line Supervisors of Retail Sales Workers,12,0.6666666666666666,True
+43-5071,"Shipping, Receiving, and Inventory Clerks",12,0.6666666666666666,True
+43-6013,Medical Secretaries and Administrative Assistants,12,0.6666666666666666,True
+49-9071,"Maintenance and Repair Workers, General",9,0.5,True
