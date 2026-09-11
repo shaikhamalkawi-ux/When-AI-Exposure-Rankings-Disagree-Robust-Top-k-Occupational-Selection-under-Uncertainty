@@ -1,33 +1,46 @@
-# Final QA report
+# Final QA report — applied author version
 
-## Production checks
+## Scope
+- Scientific numerical lineage retained from BeyondAIR V6R1.
+- No dataset, 661x18 priority matrix, selected list, solver output, core numerical result, or claim boundary was changed.
+- Author metadata and applied framing were added, and the final mathematical/notation review points were closed.
 
-- Local final main manuscript: **6 pages**.
-- Local final Supplementary Material: **4 pages**.
-- Local main + supplement combined: **10 pages**.
-- Publication-facing PDFs are searchable and render cleanly.
-- No Type 3 fonts are present; all listed fonts are embedded Type 1 fonts.
-- LaTeX compilation completed with no undefined references/citations and no overfull boxes.
-- Author order, affiliations, and emails were checked against the supplied author metadata.
-- The manuscript title and applied framing are consistent across main paper, supplement, and repository documentation.
-- Publication-facing source contains no anonymous-manuscript label or internal version/QA language.
+## Numerical replay
+- Coherent Top-25 intersection / union: 14 / 37.
+- Independent-box guaranteed / possible: 4 / 87.
+- Screened relative-minimax objective: 0.03476246751512021; reported MIP gap 0.
+- Unscreened 661-binary objective: 0.03476246751512037; reported MIP gap 0.
+- Same 25-member selected set in screened and unscreened solves: PASS.
+- Breakpoint values reproduced: 0.5743200867083742, 0.4346510222658756, 0.07875642091302637.
+- Possible-37 / coherent-union shared identities: 32; set equality is false.
 
-## Scientific/numerical checks
+## Main manuscript
+- IEEE conference format: PASS.
+- Pages: 6.
+- References: 30.
+- Overfull boxes: 0.
+- Undefined citations/references: 0.
+- Type-3 fonts: 0.
+- All listed PDF fonts embedded: PASS.
+- PDF searchable and unencrypted: PASS.
+- Visual inspection of all six rendered pages: PASS.
 
-- Fresh screened objective: **0.034762467515120**; reported MIP gap **0.0**.
-- Fresh unscreened objective: **0.034762467515120**; reported MIP gap **0.0**.
-- Screened and unscreened selected 25-member sets: **identical**.
-- Current selection set equals the archived baseline selection set: **PASS**.
-- Fixed-list performance values equal the archived baseline to better than `1e-12`: **PASS**.
-- Coherent Top-25 intersection/union: **14 / 37**.
-- Occupational stability partition: **14 / 23 / 624**.
-- Independent-box guaranteed/possible: **4 / 87**.
-- Transition-boundary semantics were corrected without changing the numerical boundary values.
+## Supplement
+- Pages: 3.
+- Added explicit 14-occupation stable-set table.
+- Overfull boxes: 0.
+- Type-3 fonts: 0.
+- All listed PDF fonts embedded: PASS.
+- PDF searchable and unencrypted: PASS.
+- Visual inspection of all three rendered pages: PASS.
 
-## Local release SHA-256
+## Author metadata
+1. Ghassan Malkawi — HCT — gmalkawi@hct.ac.ae
+2. Ahmed Abdelaziz Elsayed — Canadian University Dubai — ahmed.elsayed@cud.ac.ae
+3. Asem Omari — HCT — aomari@hct.ac.ae
+4. Azmi Alazzam — HCT — aalazzam@hct.ac.ae
+5. Said Badreddine — HCT — sbadreddine@hct.ac.ae
+6. Shaima Alharthi — HCT — H00543372@hct.ac.ae
 
-- Main PDF: `3adc97f424a435eae513481b0f64ce8232c26b4d2f14ca836092b946a54ae0c4`
-- Supplement PDF: `81d39ea1f94278f71cd856bc1a950c969686218d36ae3970b6f157d0f766766a`
-- Combined PDF: `986e8978268c0ff7f80ac3829fda7213929cda5cfb8127f83e08f8b602fa4bee`
-
-The GitHub workflow independently recompiles the same source and writes its own `GITHUB_BUILD_SHA256.txt`; byte-level PDF hashes can differ across TeX environments even when the source and reported results are unchanged.
+## Decision
+Ready as the author/applied submission build. No additional scientific expansion is recommended before submission unless a specific editor/reviewer request or reproducible error is identified.
