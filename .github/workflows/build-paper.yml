@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - '_bootstrap/READY'
+      - '.github/workflows/build-paper.yml'
 
 permissions:
   contents: write
@@ -19,13 +20,30 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Unpack authoritative author-final sources
+      - name: Reconstruct authoritative author-final sources
         shell: bash
         run: |
           set -euo pipefail
-          tar -xzf _bootstrap/author_final_bundle.tar.gz
+          mkdir -p source reproducibility/data reproducibility/generated \
+            reproducibility/reference_outputs/screened reproducibility/reference_outputs/unscreened
+          decode_parts() {
+            local pattern="$1"
+            local target="$2"
+            cat $pattern | base64 --decode | gzip -dc > "$target"
+          }
+          decode_parts '_bootstrap/main_tex.part*' 'source/main.tex'
+          decode_parts '_bootstrap/supplement_tex.part*' 'source/supplement.tex'
+          decode_parts '_bootstrap/priority_matrix.part*' 'reproducibility/data/BeyondAIR_Primitive_Scenario_Priority_Matrix_661x18.csv'
+          decode_parts '_bootstrap/interval_ledger.part*' 'reproducibility/data/BeyondAIR_Interval_Core_Ledger_661.csv'
+          decode_parts '_bootstrap/scenario_register.part*' 'reproducibility/data/BeyondAIR_Scenario_Register_18.csv'
+          decode_parts '_bootstrap/reproduce_py.part*' 'reproducibility/reproduce_beyondair.py'
+          decode_parts '_bootstrap/repro_readme.part*' 'reproducibility/README.md'
+          decode_parts '_bootstrap/repro_validation.part*' 'reproducibility/VALIDATION.txt'
           chmod +x reproducibility/reproduce_beyondair.py
-          mkdir -p reproducibility/generated reproducibility/reference_outputs/screened reproducibility/reference_outputs/unscreened
+          test -s source/main.tex
+          test -s source/supplement.tex
+          test -s reproducibility/data/BeyondAIR_Primitive_Scenario_Priority_Matrix_661x18.csv
+          test -s reproducibility/data/BeyondAIR_Interval_Core_Ledger_661.csv
 
       - name: Install scientific Python dependencies
         run: python -m pip install --upgrade pip numpy pandas scipy matplotlib
