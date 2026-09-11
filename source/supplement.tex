@@ -11,11 +11,11 @@
 \section*{S1. Input and scenario register}
 The decision layer uses three frozen normalized exposure channels: AI Occupational Exposure (AIOE) \cite{Sfelten}, Microsoft user-goal, and Microsoft AI-action/nonphysical \cite{Stomlinson}. Employment scale is May 2025 OEWS employment share \cite{Sbls}, and the five occupation-level skill descriptors are O*NET 30.3 Importance values \cite{Sonet}. The construction follows transparent composite-indicator practice \cite{Soecd}.
 
-Let $a_i^{(c)}\in[0,1]$ denote frozen normalized exposure for channel $c$ and $z_{im}\in[0,1]$ the frozen normalized O*NET value for skill $m$. The five skills are Critical Thinking, Active Learning, Learning Strategies, Active Listening, and Speaking. For construction $w$ with retained set $M_w$,
+Let $a_i^{(r)}\in[0,1]$ denote frozen normalized exposure for channel $r$ and $z_{im}\in[0,1]$ the frozen normalized O*NET value for skill $m$. The five skills are Critical Thinking, Active Learning, Learning Strategies, Active Listening, and Speaking. For construction $w$ with retained set $M_w$,
 \[
-h_i^{(w)}=\frac{1}{|M_w|}\sum_{m\in M_w}z_{im},\qquad q_i^{(c,w)}=a_i^{(c)}\bigl(1-h_i^{(w)}\bigr),\qquad p_i^t=s_iq_i^{(c,w)}.
+h_i^{(w)}=\frac{1}{|M_w|}\sum_{m\in M_w}z_{im},\qquad q_i^{(r,w)}=a_i^{(r)}\bigl(1-h_i^{(w)}\bigr),\qquad p_i^t=s_iq_i^{(r,w)}.
 \]
-The equal-five construction uses all five skills; each of the five leave-one-out constructions removes exactly one skill. Thus the 18 primitive priority vectors are the Cartesian product of three exposure channels and six constructions. The upstream normalized values are treated as frozen inputs to this decision-layer paper and are not re-estimated here. The priority box is $\ell_i=\min_t p_i^t$, $u_i=\max_t p_i^t$; the point core is $c_i=p_i^{\mathrm{AIOE,equal-five}}$, hence $\ell_i\le c_i\le u_i$.
+The factor $1-h_i^{(w)}$ is a declared screening transformation: a larger retained-skill aggregate lowers the modifier within this construction, but this does not establish a causal protective effect of skills. The equal-five construction uses all five skills; each of the five leave-one-out constructions removes exactly one skill. Thus the 18 primitive priority vectors are the Cartesian product of three exposure channels and six constructions. The upstream normalized values are treated as frozen inputs to this decision-layer paper and are not re-estimated here. The priority box is $\ell_i=\min_t p_i^t$, $u_i=\max_t p_i^t$; the point core is $c_i=p_i^{\mathrm{AIOE,equal-five}}$, hence $\ell_i\le c_i\le u_i$.
 
 \begin{table}[h]\centering\small
 \caption{Primitive scenario construction.}
@@ -55,23 +55,26 @@ Best rank is existential:
 \[r_i^{\min}=1+\sum_{j\ne i}\ind\{\ell_j>u_i\}.\]
 Worst rank is pessimistic:
 \[r_i^{\max}=1+\sum_{j\ne i}\ind\{u_j\ge\ell_i\}.\]
-Possible membership is $r_i^{\min}\le k$ and guaranteed membership is $r_i^{\max}\le k$. The strict/non-strict distinction controls boundary inclusion in the contraction analysis.
+Here $\ind\{\cdot\}$ denotes the indicator function. Possible membership is $r_i^{\min}\le k$ and guaranteed membership is $r_i^{\max}\le k$. The strict/non-strict distinction controls boundary inclusion in the contraction analysis.
 
 \section*{S4. Safe-screening proof detail}
-Let $G=\{i:r_i^{\max}\le k\}$ and $Z=\{i:r_i^{\min}>k\}$. Order the items in $G$ by nonincreasing lower bound and insert them in that order. If the next $g\in G$ is absent from a size-$k$ optimum, at most $k-1$ competitors satisfy $u_j\ge\ell_g$, so the list contains an $h$ with $u_h<\ell_g$. Any guaranteed item $g'$ inserted earlier has $\ell_{g'}\ge\ell_g$ and hence $u_{g'}\ge\ell_{g'}\ge\ell_g$, so it cannot be chosen as $h$. Replacing $h$ by $g$ therefore preserves all earlier guaranteed insertions and weakly increases every scenario-wise selected mass.
+Let $G=\{i:r_i^{\max}\le k\}$ and $Z=\{i:r_i^{\min}>k\}$. Order the items in $G$ by nonincreasing lower bound and insert them in that order. If the next $a\in G$ is absent from a size-$k$ optimum, at most $k-1$ competitors satisfy $u_j\ge\ell_a$, so the list contains an $h$ with $u_h<\ell_a$. Any guaranteed item $a'$ inserted earlier has $\ell_{a'}\ge\ell_a$ and hence $u_{a'}\ge\ell_{a'}\ge\ell_a$, so it cannot be chosen as $h$. Replacing $h$ by $a$ therefore preserves all earlier guaranteed insertions and weakly increases every scenario-wise selected mass.
 
 After all $G$ items have been inserted, suppose a selected $i\in Z$ remains. At least $k$ competitors satisfy $\ell_j>u_i$, so at least one such $j$ is omitted. Replacing $i$ by that $j$ strictly increases every scenario-wise selected mass. Because the family of size-$k$ lists is finite, strict exchanges cannot cycle. If a $Z$ item remained, another strict exchange would exist; therefore the process terminates at an optimum containing all $G$ and no $Z$. This establishes the existence claim for every objective coordinatewise nonincreasing in scenario-wise selected mass.
 
-\section*{S5. Fixed-list verification and criterion sensitivity}
+\section*{S5. Fixed-list verification, consensus benchmark, and criterion sensitivity}
 \begin{table}[h]\centering\small
 \caption{Fixed-list comparison at $k=25$ over 18 primitive scenarios.}
 \begin{tabular}{lrrrr}\toprule Rule&Mean capture&Minimum capture&Max. rel. regret&Box regret\\\midrule
-Scale only&93.02\%&88.35\%&11.65\%&0.0238\\
-Baseline composite&96.14\%&93.70\%&6.30\%&0.0181\\
-Relative minimax&96.99\%&96.52\%&3.48\%&0.0195\\\bottomrule\end{tabular}
+Scale only&93.02\%&88.35\%&11.65\%&0.02380\\
+Baseline composite&96.14\%&93.70\%&6.30\%&0.01810\\
+Consensus frequency&97.00\%&95.89\%&4.11\%&0.01952\\
+Relative minimax&96.99\%&96.52\%&3.48\%&0.01945\\\bottomrule\end{tabular}
 \end{table}
-The relative-minimax objective is $\max_t R_t(x)$ with $R_t(x)=1-\sum_i p_i^t x_i/V_t^\star$. The absolute-minimax sensitivity instead defines
-\[R_t^{\mathrm{abs}}(x)=V_t^\star-\sum_i p_i^t x_i,\qquad \min_{x:\sum_i x_i=k}\max_tR_t^{\mathrm{abs}}(x).\]
+For the consensus-frequency benchmark, $f_i=\sum_{t=1}^{18}\ind\{i\in T_t\}$ counts appearances in scenario-specific Top-25 lists; the 25 largest counts are selected, with ascending SOC only as a deterministic tie-break. The cutoff is strict (9 versus 8 appearances), so the tie rule does not affect membership. The list overlaps relative minimax in 24/25 occupations: consensus includes Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop (35-9031), whereas minimax includes Amusement and Recreation Attendants (39-3091). Exact scenario-by-scenario capture/regret and the complete 25-member list are retained in the reproducibility addendum. Counts are design occurrences, not probabilities.
+
+The relative-minimax objective is $\max_t R_t(x)$ with $R_t(x)=1-\sum_i p_i^t x_i/V_t^\star$ and $V_t^\star>0$ for every admitted scenario. The absolute-minimax sensitivity instead defines
+\[R_t^{\mathrm{abs}}(x)=V_t^\star-\sum_i p_i^t x_i,\qquad \min_{x:\,\sum_i x_i=k,\ x_i\in\{0,1\}}\max_tR_t^{\mathrm{abs}}(x).\]
 Its list overlaps the relative-minimax list in 23/25 occupations, with minimum relative capture 94.79\% and maximum relative regret 5.21\%.
 
 \section*{S6. Nested-support sensitivity and exact boundary semantics}
@@ -84,7 +87,7 @@ Guaranteed $\to14$&0.5743200867&0.4256799133&coherent-intersection set after cro
 Possible $\to37$&0.4346510223&0.5653489777&cardinality only; 32 shared\\
 Full 25/25&0.0787564209&0.9212435791&point list\\\bottomrule\end{tabular}
 \end{table}
-These values are transition boundaries. Under the stated tie convention, the post-contraction state applies for $g<g^\star$ when contraction proceeds downward from $g=1$; equality is evaluated by the original strict $>$ and non-strict $\ge$ rules rather than by rounded prose labels.
+We denote each reported structural transition boundary by $g^\star$. These values are transition boundaries. Under the stated tie convention, the post-contraction state applies for $g<g^\star$ when contraction proceeds downward from $g=1$; equality is evaluated by the original strict $>$ and non-strict $\ge$ rules rather than by rounded prose labels.
 
 At the 37-member boundary, the five possible-set-only occupations are Computer and Information Systems Managers (11-3021), Medical Assistants (31-9092), Billing and Posting Clerks (43-3021), First-Line Supervisors of Construction Trades and Extraction Workers (47-1011), and Inspectors, Testers, Sorters, Samplers, and Weighers (51-9061). The five coherent-union-only occupations are Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop (35-9031), Amusement and Recreation Attendants (39-3091), Counter and Rental Clerks (41-2021), Production, Planning, and Expediting Clerks (43-5061), and First-Line Supervisors of Production and Operating Workers (51-1011).
 
@@ -97,6 +100,7 @@ For a strictly decreasing homeomorphism $\phi:[0,1]\to[0,1]$ with $\phi(0)=1$, $
 Box guaranteed/possible&Exact membership under independent priority intervals&Probability of selection\\
 Coherent intersection/union&Membership over 18 admitted designs&Universal robustness\\
 Relative-minimax list&Best worst relative capture over declared scenarios&Optimal workforce policy\\
+Consensus-frequency list&Occurrence-based aggregation over 18 admitted Top-25 lists&Probability of selection or worst-case optimum\\
 Box regret&Exact absolute regret under independent priority intervals&Dominance under coherent designs\\
 Boundary $g^\star$&Width at which rank-comparison status can change&Confidence or calibrated possibility\\\bottomrule\end{tabular}
 \end{table}
