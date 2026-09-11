@@ -8,7 +8,7 @@
 - Undefined citations/references: 0.
 - Overfull boxes: 0.
 - All 8 pages rendered and visually inspected: PASS.
-- Figures: bold titles, axis labels, tick labels, legends, and annotations; four-sided plotting frames; annotations remain inside the plotting rectangle. Manuscript captions contain scientific descriptions only, with production-formatting language removed.
+- Figures: bold titles, axis labels, tick labels, legends, and annotations; four-sided plotting frames; annotations remain inside the plotting rectangle. Manuscript captions contain scientific descriptions only. Figure 3 includes Scale only, Baseline composite, Consensus-Frequency, and Relative minimax.
 - PDF fonts embedded; Type-3 fonts: 0.
 - PDFs are searchable and unencrypted.
 - Author order and affiliations match the requested author version; Asem Omari and Azmi Alazzam are visibly separated.
@@ -23,9 +23,11 @@
 - The nonessential underdefined SIPP diagnostic was removed.
 - SOC codes are reported for all 14 stable occupations in the Supplement.
 - Consensus-Frequency is included only as a compact descriptive benchmark, not a new primary contribution or probability model.
+- `Top_25(p^t)` is defined explicitly as the set of the 25 largest scenario priorities.
 - Consensus-Frequency verified values: mean capture 97.00%; minimum capture 95.89%; maximum relative regret 4.11%; exact box absolute regret 0.01952; overlap with relative minimax 24/25.
 - Relative-minimax locked values remain: mean capture 96.99%; minimum capture 96.52%; maximum relative regret 3.48%; exact box absolute regret 0.01945.
 - Consensus-only occupation: Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop (35-9031). Relative-minimax-only occupation: Amusement and Recreation Attendants (39-3091).
-- The Consensus-Frequency cutoff is strict (9 versus 8 scenario appearances), so the deterministic SOC tie-break does not affect membership.
+- The Consensus-Frequency cutoff is strict: the retained 25th occupation appears in 9 scenario Top-25 lists and the 26th appears in 8. Therefore no membership tie occurs at the cutoff; ascending SOC is only a dormant deterministic fallback tie-break away from the cutoff.
+- The Supplement reports the complete Consensus-Frequency Top-25 SOC membership and the one-item disagreement, with labeled machine-readable selection and scenario-performance ledgers in `reproducibility/`.
 - All pre-existing primary scientific results, the 661-occupation frame, 18-scenario construction, exact rank certificates, screening theorem, box-regret result, and nested-support breakpoints remain unchanged.
 - GitHub Actions final source/figure/PDF build: PASS.
