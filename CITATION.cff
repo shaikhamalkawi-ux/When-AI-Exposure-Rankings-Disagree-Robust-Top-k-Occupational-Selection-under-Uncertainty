@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this repository, please cite the accompanying paper."
+title: "When AI Exposure Rankings Disagree: Robust Top-25 Selection Across 661 U.S. Occupations"
+type: software
+authors:
+  - family-names: Malkawi
+    given-names: Ghassan
+    email: gmalkawi@hct.ac.ae
+    affiliation: "Faculty of Computer Information Science, Higher Colleges of Technology, Al Ain, Abu Dhabi, United Arab Emirates"
+  - family-names: Elsayed
+    given-names: Ahmed Abdelaziz
+    email: ahmed.elsayed@cud.ac.ae
+    affiliation: "Department of Computer Engineering and Computational Sciences, Canadian University Dubai, Dubai, United Arab Emirates"
+  - family-names: Omari
+    given-names: Asem
+    email: aomari@hct.ac.ae
+    affiliation: "Faculty of Computer Information Science, Higher Colleges of Technology, Al Ain, Abu Dhabi, United Arab Emirates"
+  - family-names: Alazzam
+    given-names: Azmi
+    email: aalazzam@hct.ac.ae
+    affiliation: "Faculty of Computer Information Science, Higher Colleges of Technology, Al Ain, Abu Dhabi, United Arab Emirates"
+  - family-names: Badreddine
+    given-names: Said
+    email: sbadreddine@hct.ac.ae
+    affiliation: "Faculty of Computer Information Science, Higher Colleges of Technology, Al Ain, Abu Dhabi, United Arab Emirates"
+  - family-names: Alharthi
+    given-names: Shaima
+    email: H00543372@hct.ac.ae
+    affiliation: "Faculty of Computer Information Science, Higher Colleges of Technology, Al Ain, Abu Dhabi, United Arab Emirates"
+version: "author-final-2026-09-11"
+date-released: 2026-09-11
