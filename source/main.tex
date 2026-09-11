@@ -3,6 +3,7 @@
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
 \newcommand{\ind}{\mathbf{1}}
 \newcommand{\R}{\mathbb{R}}
 \title{When AI Exposure Rankings Disagree: Robust Top-25 Selection Across 661 U.S. Occupations}
@@ -226,6 +227,9 @@ The uncertainty family is finite and reflects admitted measurement choices rathe
 
 \section{Conclusion}
 Across 661 U.S. occupations, AI-exposure disagreement materially affects who enters a Top-25 priority list. Yet the disagreement is structured: 14 occupations are stable across all coherent designs and 37 form the coherent candidate envelope. Exact interval ranks distinguish guaranteed from merely possible membership, while coherent minimax supplies one fixed list when a decision must be made. Relative minimax raises worst-scenario capture from 93.70\% to 96.52\% compared with the baseline composite and retains 24/25 occupations from the Consensus-Frequency benchmark, without claiming universal robustness. Exact breakpoint semantics prevent equality/tie conventions from being mistaken for new membership at a boundary. The contribution is therefore an applied occupational-screening result supported by exact optimization certificates, rather than an optimization method presented with a workforce example.
+
+\medskip
+\noindent\textbf{Data and Code Availability---} The data, code, scenario matrices, selected lists, and reproducibility materials supporting this study are publicly available in the project \href{https://github.com/shaikhamalkawi-ux/When-AI-Exposure-Rankings-Disagree-Robust-Top-k-Occupational-Selection-under-Uncertainty}{\textbf{GitHub}~\raisebox{0.15ex}{\scriptsize$\nearrow$}}.
 
 \begin{thebibliography}{30}\footnotesize
 \bibitem{yin2026} M. Yin, H. Vu, and C. Persico, ``How (un)Stable Are LLM Occupational Exposure Scores? Evidence from Multi-Model Replication,'' NBER Working Paper 35110, 2026, doi: 10.3386/w35110.
