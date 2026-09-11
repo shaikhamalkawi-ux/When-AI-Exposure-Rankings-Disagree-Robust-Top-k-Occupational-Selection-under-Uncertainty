@@ -4,16 +4,24 @@
 \usepackage[T1]{fontenc}\usepackage{lmodern}\usepackage{microtype}
 \newcommand{\ind}{\mathbf{1}}
 \title{Supplementary Material\\\large When AI Exposure Rankings Disagree: Robust Top-25 Selection Across 661 U.S. Occupations}
-\author{Ghassan Malkawi; Ahmed Abdelaziz Elsayed; Asem Omari\\Azmi Alazzam; Said Badreddine; Shaima Alharthi}
+\author{Ghassan Malkawi; Ahmed Abdelaziz Elsayed; Asem Omari;\\Azmi Alazzam; Said Badreddine; Shaima Alharthi}
 \date{}
 \begin{document}\maketitle
+
 \section*{S1. Input and scenario register}
-The 18 primitive priority vectors are the Cartesian product of three exposure channels and six constructions. For occupation $i$ and design $t$, priority is $p_i^t=s_iq_i^t$, where $s_i$ is May 2025 OEWS employment share. The priority box is $\ell_i=\min_t p_i^t$, $u_i=\max_t p_i^t$; the point core is $c_i=p_i^{\mathrm{AIOE,equal-five}}$, so $\ell_i\le c_i\le u_i$ for every occupation.
+The decision layer uses three frozen normalized exposure channels: AI Occupational Exposure (AIOE) \cite{Sfelten}, Microsoft user-goal, and Microsoft AI-action/nonphysical \cite{Stomlinson}. Employment scale is May 2025 OEWS employment share \cite{Sbls}, and the five occupation-level skill descriptors are O*NET 30.3 Importance values \cite{Sonet}. The construction follows transparent composite-indicator practice \cite{Soecd}.
+
+Let $a_i^{(c)}\in[0,1]$ denote frozen normalized exposure for channel $c$ and $z_{im}\in[0,1]$ the frozen normalized O*NET value for skill $m$. The five skills are Critical Thinking, Active Learning, Learning Strategies, Active Listening, and Speaking. For construction $w$ with retained set $M_w$,
+\[
+h_i^{(w)}=\frac{1}{|M_w|}\sum_{m\in M_w}z_{im},\qquad q_i^{(c,w)}=a_i^{(c)}\bigl(1-h_i^{(w)}\bigr),\qquad p_i^t=s_iq_i^{(c,w)}.
+\]
+The equal-five construction uses all five skills; each of the five leave-one-out constructions removes exactly one skill. Thus the 18 primitive priority vectors are the Cartesian product of three exposure channels and six constructions. The upstream normalized values are treated as frozen inputs to this decision-layer paper and are not re-estimated here. The priority box is $\ell_i=\min_t p_i^t$, $u_i=\max_t p_i^t$; the point core is $c_i=p_i^{\mathrm{AIOE,equal-five}}$, hence $\ell_i\le c_i\le u_i$.
+
 \begin{table}[h]\centering\small
 \caption{Primitive scenario construction.}
 \begin{tabular}{p{.23\textwidth}p{.68\textwidth}}\toprule Axis&Admitted levels\\\midrule
 Exposure channel&AIOE; Microsoft user-goal; Microsoft AI-action/nonphysical\\
-Construction&equal-five; leave Critical Thinking out; leave Active Learning out; leave Learning Strategies out; leave Active Listening out; leave Speaking out\\\bottomrule\end{tabular}
+Skill construction&equal-five; leave Critical Thinking out; leave Active Learning out; leave Learning Strategies out; leave Active Listening out; leave Speaking out\\\bottomrule\end{tabular}
 \end{table}
 
 \section*{S2. Membership counts and the 14 stable occupations}
@@ -22,22 +30,23 @@ Construction&equal-five; leave Critical Thinking out; leave Active Learning out;
 \begin{tabular}{rrrrr}\toprule $k$&Scenario intersection&Scenario union&Box guaranteed&Box possible\\\midrule
 10&7&16&2&43\\25&14&37&4&87\\50&32&73&14&159\\100&68&135&27&244\\\bottomrule\end{tabular}
 \end{table}
+
 At $k=25$, the 14 occupations present in every coherent Top-25 are:
 \begin{enumerate}\small
-\item General and Operations Managers;
-\item Accountants and Auditors;
-\item Registered Nurses;
-\item Waiters and Waitresses;
-\item Janitors and Cleaners, Except Maids and Housekeeping Cleaners;
-\item Cashiers;
-\item Retail Salespersons;
-\item Sales Representatives, Wholesale and Manufacturing, Except Technical and Scientific Products;
-\item Bookkeeping, Accounting, and Auditing Clerks;
-\item Receptionists and Information Clerks;
-\item Secretaries and Administrative Assistants, Except Legal, Medical, and Executive;
-\item Office Clerks, General;
-\item Heavy and Tractor-Trailer Truck Drivers;
-\item Stockers and Order Fillers.
+\item General and Operations Managers (11-1021);
+\item Accountants and Auditors (13-2011);
+\item Registered Nurses (29-1141);
+\item Waiters and Waitresses (35-3031);
+\item Janitors and Cleaners, Except Maids and Housekeeping Cleaners (37-2011);
+\item Cashiers (41-2011);
+\item Retail Salespersons (41-2031);
+\item Sales Representatives, Wholesale and Manufacturing, Except Technical and Scientific Products (41-4012);
+\item Bookkeeping, Accounting, and Auditing Clerks (43-3031);
+\item Receptionists and Information Clerks (43-4171);
+\item Secretaries and Administrative Assistants, Except Legal, Medical, and Executive (43-6014);
+\item Office Clerks, General (43-9061);
+\item Heavy and Tractor-Trailer Truck Drivers (53-3032);
+\item Stockers and Order Fillers (53-7065).
 \end{enumerate}
 These are stable screening priorities within the declared 18-specification family; the result is not a displacement or program recommendation.
 
@@ -49,7 +58,9 @@ Worst rank is pessimistic:
 Possible membership is $r_i^{\min}\le k$ and guaranteed membership is $r_i^{\max}\le k$. The strict/non-strict distinction controls boundary inclusion in the contraction analysis.
 
 \section*{S4. Safe-screening proof detail}
-Let $G=\{i:r_i^{\max}\le k\}$ and $Z=\{i:r_i^{\min}>k\}$. To insert $g\in G$, a size-$k$ list omitting it contains an $h$ with $u_h<\ell_g$, and replacement weakly increases every scenario-wise selected mass. If $i\in Z$ is selected, at least $k$ competitors satisfy $\ell_j>u_i$, so some omitted $j$ strictly dominates $i$ in every scenario. Each such exchange strictly increases every scenario-wise selected mass; because the family of size-$k$ lists is finite, cycling is impossible. Therefore an optimum exists containing $G$ and excluding $Z$ for any minimization objective coordinatewise nonincreasing in scenario-wise selected mass.
+Let $G=\{i:r_i^{\max}\le k\}$ and $Z=\{i:r_i^{\min}>k\}$. Order the items in $G$ by nonincreasing lower bound and insert them in that order. If the next $g\in G$ is absent from a size-$k$ optimum, at most $k-1$ competitors satisfy $u_j\ge\ell_g$, so the list contains an $h$ with $u_h<\ell_g$. Any guaranteed item $g'$ inserted earlier has $\ell_{g'}\ge\ell_g$ and hence $u_{g'}\ge\ell_{g'}\ge\ell_g$, so it cannot be chosen as $h$. Replacing $h$ by $g$ therefore preserves all earlier guaranteed insertions and weakly increases every scenario-wise selected mass.
+
+After all $G$ items have been inserted, suppose a selected $i\in Z$ remains. At least $k$ competitors satisfy $\ell_j>u_i$, so at least one such $j$ is omitted. Replacing $i$ by that $j$ strictly increases every scenario-wise selected mass. Because the family of size-$k$ lists is finite, strict exchanges cannot cycle. If a $Z$ item remained, another strict exchange would exist; therefore the process terminates at an optimum containing all $G$ and no $Z$. This establishes the existence claim for every objective coordinatewise nonincreasing in scenario-wise selected mass.
 
 \section*{S5. Fixed-list verification and criterion sensitivity}
 \begin{table}[h]\centering\small
@@ -79,17 +90,22 @@ At the 37-member boundary, the five possible-set-only occupations are Computer a
 
 For a strictly decreasing homeomorphism $\phi:[0,1]\to[0,1]$ with $\phi(0)=1$, $\phi(1)=0$, set $g=\phi(\alpha)$. Linear $\phi(\alpha)=1-\alpha$ and quadratic $\phi(\alpha)=(1-\alpha)^2$ relabel the same support family and cannot constitute independent robustness tests.
 
-\section*{S7. Secondary SIPP diagnostic and claim boundary}
-A separate descriptive diagnostic compares the three Top-25 lists with a fixed 17-occupation target set. The scale-only list contains one target with outgoing SIPP support and captures 50.05\% of target-origin weighted outgoing mass. Baseline composite and relative minimax each contain two supported targets and each capture 66.39\%. These are descriptive overlaps only; they do not estimate out-of-sample regret, worker transition probability, AI causality, or program success.
-
+\section*{S7. Claim-admissibility matrix}
 \begin{table}[h]\centering\small
 \caption{Permitted and unsupported interpretations.}
 \begin{tabular}{p{.25\textwidth}p{.36\textwidth}p{.31\textwidth}}\toprule Output&Permitted&Unsupported\\\midrule
-Box membership&Exact membership under independent priority intervals&Probability of selection\\
+Box guaranteed/possible&Exact membership under independent priority intervals&Probability of selection\\
 Coherent intersection/union&Membership over 18 admitted designs&Universal robustness\\
 Relative-minimax list&Best worst relative capture over declared scenarios&Optimal workforce policy\\
 Box regret&Exact absolute regret under independent priority intervals&Dominance under coherent designs\\
-Boundary $g^\star$&Width at which rank-comparison status can change&Confidence or calibrated possibility\\
-SIPP overlap&Descriptive coverage of external target set&Validation or transition probability\\\bottomrule\end{tabular}
+Boundary $g^\star$&Width at which rank-comparison status can change&Confidence or calibrated possibility\\\bottomrule\end{tabular}
 \end{table}
+
+\begin{thebibliography}{5}\small
+\bibitem{Sfelten} E. W. Felten, M. Raj, and R. Seamans, ``Occupational, industry, and geographic exposure to artificial intelligence: A novel dataset and its potential uses,'' \emph{Strategic Management Journal}, vol. 42, no. 12, pp. 2195--2217, 2021, doi: 10.1002/smj.3286.
+\bibitem{Stomlinson} K. Tomlinson, S. Jaffe, W. Wang, S. Counts, and S. Suri, ``Working with AI: Measuring the Applicability of Generative AI to Occupations,'' arXiv:2507.07935, 2025, doi: 10.48550/arXiv.2507.07935.
+\bibitem{Sbls} U.S. Bureau of Labor Statistics, \emph{Occupational Employment and Wage Statistics, May 2025 National Estimates}, 2026.
+\bibitem{Sonet} U.S. Department of Labor, Employment and Training Administration, \emph{O*NET 30.3 Database}, May 2026 release.
+\bibitem{Soecd} OECD and Joint Research Centre, \emph{Handbook on Constructing Composite Indicators: Methodology and User Guide}. OECD Publishing, 2008.
+\end{thebibliography}
 \end{document}
