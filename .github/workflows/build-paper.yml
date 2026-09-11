@@ -21,6 +21,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Apply clickable GitHub availability link
+        run: python source/apply_github_link_patch.py
+
       - name: Install Python dependencies
         run: python -m pip install --upgrade pip matplotlib
 
@@ -48,14 +51,14 @@ jobs:
           ! grep -E 'Overfull \\hbox|Overfull \\vbox|undefined references|undefined citation' source/main.log
           ! grep -E 'Overfull \\hbox|Overfull \\vbox|undefined references|undefined citation' source/supplement.log
 
-      - name: Commit generated PDFs and figures
+      - name: Commit final source and generated PDFs
         shell: bash
         run: |
           set -euo pipefail
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add paper source/figures GITHUB_BUILD_SHA256.txt
+          git add source/main.tex paper source/figures GITHUB_BUILD_SHA256.txt
           if ! git diff --cached --quiet; then
-            git commit -m 'Build submission-final manuscript PDFs'
+            git commit -m 'Add clickable GitHub data and code link'
             git push
           fi
