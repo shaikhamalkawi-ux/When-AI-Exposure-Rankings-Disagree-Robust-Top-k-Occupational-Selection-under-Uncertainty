@@ -6,7 +6,7 @@
 \title{Supplementary Material\\\large When AI Exposure Rankings Disagree: Robust Top-25 Selection Across 661 U.S. Occupations}
 \author{Ghassan Malkawi; Ahmed Abdelaziz Elsayed; Asem Omari;\\Azmi Alazzam; Said Badreddine; Shaima Alharthi}
 \date{}
-\begin{document}\maketitle
+\begin{document}\maketitle\small
 
 \section*{S1. Input and scenario register}
 The decision layer uses three frozen normalized exposure channels: AI Occupational Exposure (AIOE) \cite{Sfelten}, Microsoft user-goal, and Microsoft AI-action/nonphysical \cite{Stomlinson}. Employment scale is May 2025 OEWS employment share \cite{Sbls}, and the five occupation-level skill descriptors are O*NET 30.3 Importance values \cite{Sonet}. The construction follows transparent composite-indicator practice \cite{Soecd}.
@@ -68,10 +68,12 @@ After all $G$ items have been inserted, suppose a selected $i\in Z$ remains. At 
 \begin{tabular}{lrrrr}\toprule Rule&Mean capture&Minimum capture&Max. rel. regret&Box regret\\\midrule
 Scale only&93.02\%&88.35\%&11.65\%&0.02380\\
 Baseline composite&96.14\%&93.70\%&6.30\%&0.01810\\
-Consensus frequency&97.00\%&95.89\%&4.11\%&0.01952\\
+Consensus-Frequency&97.00\%&95.89\%&4.11\%&0.01952\\
 Relative minimax&96.99\%&96.52\%&3.48\%&0.01945\\\bottomrule\end{tabular}
 \end{table}
-For the consensus-frequency benchmark, $f_i=\sum_{t=1}^{18}\ind\{i\in T_t\}$ counts appearances in scenario-specific Top-25 lists; the 25 largest counts are selected, with ascending SOC only as a deterministic tie-break. The cutoff is strict (9 versus 8 appearances), so the tie rule does not affect membership. The list overlaps relative minimax in 24/25 occupations: consensus includes Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop (35-9031), whereas minimax includes Amusement and Recreation Attendants (39-3091). Exact scenario-by-scenario capture/regret and the complete 25-member list are retained in the reproducibility addendum. Counts are design occurrences, not probabilities.
+For the Consensus-Frequency benchmark, let $T_t=\operatorname{Top}_{25}(p^t)$ denote the 25 occupations with the largest priorities under scenario $t$. Then $f_i=\sum_{t=1}^{18}\ind\{i\in T_t\}$ counts appearances across the 18 scenario-specific Top-25 lists. The 25 largest counts are selected; the cutoff is strict (9 appearances for the 25th occupation versus 8 for the 26th), so no frequency tie occurs at the membership cutoff. Ascending SOC is retained only as a fixed deterministic tie-break for equal counts away from the cutoff. The list overlaps relative minimax in 24/25 occupations: consensus includes Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop (35-9031), whereas minimax includes Amusement and Recreation Attendants (39-3091). Exact scenario-by-scenario capture/regret are retained in the reproducibility addendum. Counts are design occurrences, not probabilities.
+
+\noindent\textbf{Consensus-Frequency Top-25 SOC membership.} 11-1021, 13-2011, 29-1141, 35-3031, 37-2011, 41-2011, 41-2031, 41-4012, 43-3031, 43-4171, 43-6014, 43-9061, 53-3032, 53-7065, 13-1111, 43-1011, 13-1071, 15-1232, 33-9032, 35-2014, 35-9031, 41-1011, 43-5071, 43-6013, and 49-9071. The complete labeled list is supplied in \texttt{consensus\_frequency\_selection.csv}. The relative-minimax list contains the same 24 shared occupations, replacing Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop (35-9031) with Amusement and Recreation Attendants (39-3091).
 
 The relative-minimax objective is $\max_t R_t(x)$ with $R_t(x)=1-\sum_i p_i^t x_i/V_t^\star$ and $V_t^\star>0$ for every admitted scenario. The absolute-minimax sensitivity instead defines
 \[R_t^{\mathrm{abs}}(x)=V_t^\star-\sum_i p_i^t x_i,\qquad \min_{x:\,\sum_i x_i=k,\ x_i\in\{0,1\}}\max_tR_t^{\mathrm{abs}}(x).\]

@@ -135,7 +135,7 @@ R_{\square}^{\mathrm{abs}}(X)=V_k(v(X))-\sum_{i\in X}\ell_i.
 Writing the expression with $V_k$ avoids ambiguity over the identity of a tied Top-$k$ corner set.
 
 \section{Nested-Support Contraction and Exact Boundaries}
-Possibilistic and interval-weight approaches can parameterize uncertain decision inputs \cite{kasperski2010,dubois2016}. Here possibility theory is only optional coordinate language: the empirical object is a finite priority support plus a declared point core, not a calibrated possibility distribution. Retained support width $g\in[0,1]$ defines
+Possibilistic and interval-weight approaches can parameterize uncertain decision inputs \cite{kasperski2010,dubois2016}. Possibility theory is used only as optional parameterization language: the empirical object is a finite priority support plus a declared point core, not a calibrated possibility distribution. Retained support width $g\in[0,1]$ defines
 \begin{equation}
 L_i(g)=c_i-g(c_i-\ell_i),\qquad U_i(g)=c_i+g(u_i-c_i).
 \label{eq:contract}
@@ -181,12 +181,12 @@ For any strictly decreasing homeomorphism $\phi:[0,1]\to[0,1]$ with $\phi(0)=1$ 
 \section{Application Results}
 Table~\ref{tab:performance} compares the three primary fixed-list rules and one transparent consensus benchmark. The relative-minimax list improves the minimum coherent-scenario capture to 96.52\%, from 93.70\% for the baseline composite and 88.35\% for scale only. Its exact box absolute regret is 0.01945, slightly larger than the baseline's 0.01810, so no list is unconditionally ``most robust'' without naming the uncertainty structure and criterion.
 
-As a descriptive rank-aggregation benchmark, let $T_t=\operatorname{Top}_{25}(p^t)$ and define
+As a descriptive rank-aggregation benchmark, let $T_t=\operatorname{Top}_{25}(p^t)$ denote the set of the 25 occupations with the largest priorities under scenario $t$, and define
 \begin{equation}
 f_i=\sum_{t=1}^{18}\ind\{i\in T_t\}.
 \label{eq:consensus}
 \end{equation}
-The Consensus-Frequency list contains the 25 occupations with the largest $f_i$; because the 18 scenarios are declared designs rather than probability-weighted draws, $f_i$ is an occurrence count, not a selection probability. This simple benchmark is included only as a sanity check against broader rank/list-aggregation ideas \cite{dwork2001,fagin2003}.
+The Consensus-Frequency list contains the 25 occupations with the largest $f_i$. The 25th-ranked count is 9 and the 26th-ranked count is 8, so no frequency tie occurs at the membership cutoff; ascending SOC is retained only as a fixed deterministic tie-break for equal counts away from the cutoff. Because the 18 scenarios are declared designs rather than probability-weighted draws, $f_i$ is an occurrence count, not a selection probability. This simple benchmark is included only as a sanity check against broader rank/list-aggregation ideas \cite{dwork2001,fagin2003}.
 
 \begin{table}[t]
 \caption{Fixed-list performance at $k=25$ over 18 primitive scenarios.}
@@ -199,7 +199,7 @@ Rule & Mean cap. & Min. cap. & Max rel. regret & Box abs. regret\\
 \midrule
 Scale only & 93.02\% & 88.35\% & 11.65\% & .02380\\
 Baseline composite & 96.14\% & 93.70\% & 6.30\% & .01810\\
-Consensus frequency & 97.00\% & 95.89\% & 4.11\% & .01952\\
+Consensus-Frequency & 97.00\% & 95.89\% & 4.11\% & .01952\\
 Relative minimax & 96.99\% & 96.52\% & 3.48\% & .01945\\
 \bottomrule
 \end{tabular}}
@@ -215,12 +215,12 @@ and solve $\min_{x:\,\sum_i x_i=k,\ x_i\in\{0,1\}}\max_t R_t^{\mathrm{abs}}(x)$.
 
 \begin{figure}[t]
 \centering\includegraphics[width=.90\columnwidth]{figures/tradeoff.png}
-\caption{Robustness trade-off at $k=25$. Lower values are preferred on both axes; the baseline and relative-minimax lists are non-dominating across the two uncertainty structures.}
+\caption{Robustness trade-off at $k=25$. Lower values are preferred on both axes. Consensus-Frequency lies close to relative minimax but has higher coherent worst-case regret; the baseline composite retains the smallest independent-box regret.}
 \label{fig:trade}
 \end{figure}
 
 \section{Practical Interpretation and Limits}
-The results show why occupational AI prioritization should not be treated as one fixed ranking. Some occupations remain priority candidates across all 18 admitted constructions, while 23 additional occupations enter or leave the Top-25 depending on measurement design. For analysts or institutions that require one fixed screening list, the relative-minimax solution is a defensible compromise because it maximizes the worst retained share of scenario-optimal priority mass across the declared designs. The 24/25 overlap with the simple Consensus-Frequency benchmark shows that this solution is not driven by an idiosyncratic list, while the lower worst-case regret identifies the specific protection gained from minimax optimization.
+The results show why occupational AI prioritization should not be treated as one fixed ranking. Some occupations remain priority candidates across all 18 admitted constructions, while 23 additional occupations enter or leave the Top-25 depending on measurement design. For analysts or institutions that require one fixed screening list, the relative-minimax solution is a defensible compromise because it maximizes the worst retained share of scenario-optimal priority mass across the declared designs. The 24/25 overlap with the simple Consensus-Frequency benchmark indicates close agreement between the two lists, while the lower worst-case regret identifies the specific protection provided by the minimax criterion.
 
 The uncertainty family is finite and reflects admitted measurement choices rather than a probability law. Stochastic acceptability analysis and budgeted-uncertainty optimization address different decision questions \cite{lahdelma1998,goerigk2025}. The present list is intended for screening and further assessment. It does not estimate AI-caused displacement, worker movement, training eligibility, transition capacity, or program success. Employment is a scale variable rather than a welfare weight.
 

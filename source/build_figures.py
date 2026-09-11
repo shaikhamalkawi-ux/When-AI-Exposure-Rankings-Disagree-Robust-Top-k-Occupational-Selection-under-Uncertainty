@@ -72,9 +72,10 @@ plt.close(fig)
 
 # Figure 3: coherent relative regret vs independent-box absolute regret.
 pts = [
-    ('Scale only', 0.0238, 0.1165, (-10, -14), 'right'),
-    ('Baseline composite', 0.0181, 0.0630, (7, 8), 'left'),
-    ('Relative minimax', 0.0195, 0.0348, (7, 8), 'left'),
+    ('Scale only', 0.02380, 0.1165, (-10, -14), 'right'),
+    ('Baseline composite', 0.01810, 0.0630, (7, 8), 'left'),
+    ('Consensus-Frequency', 0.01952, 0.0411, (8, 11), 'left'),
+    ('Relative minimax', 0.01945, 0.0348, (-8, -12), 'right'),
 ]
 fig, ax = plt.subplots(figsize=(5.7, 4.35))
 for label, x, y, offset, ha in pts:
