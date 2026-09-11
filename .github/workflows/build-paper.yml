@@ -1,0 +1,88 @@
+name: Build final paper
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '_bootstrap/READY'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Reconstruct source and reproducibility inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p source reproducibility/data reproducibility/generated reproducibility/reference_outputs/screened reproducibility/reference_outputs/unscreened
+          unpack () {
+            stem="$1"; out="$2"
+            cat _bootstrap/${stem}.part* | base64 -d | gzip -d > "$out"
+          }
+          unpack main_tex source/main.tex
+          unpack supplement_tex source/supplement.tex
+          unpack priority_matrix reproducibility/data/BeyondAIR_Primitive_Scenario_Priority_Matrix_661x18.csv
+          unpack interval_ledger reproducibility/data/BeyondAIR_Interval_Core_Ledger_661.csv
+          unpack scenario_register reproducibility/data/BeyondAIR_18_Scenario_Register.csv
+          unpack reproduce_py reproducibility/reproduce_beyondair.py
+          unpack repro_readme reproducibility/README_REPRODUCE.md
+          unpack repro_validation reproducibility/REPRODUCTION_VALIDATION.md
+          chmod +x reproducibility/reproduce_beyondair.py
+
+      - name: Install scientific Python dependencies
+        run: python -m pip install --upgrade pip numpy pandas scipy matplotlib
+
+      - name: Reproduce screened and unscreened results
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd reproducibility
+          python reproduce_beyondair.py > generated/reproduction_run.txt
+          cp -a generated/. reference_outputs/screened/
+          python reproduce_beyondair.py --unscreened > generated/reproduction_run.txt
+          cp -a generated/. reference_outputs/unscreened/
+          python reproduce_beyondair.py > generated/reproduction_run.txt
+          find . -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS.txt
+          sha256sum -c SHA256SUMS.txt
+
+      - name: Build figures
+        run: python source/build_figures.py
+
+      - name: Install LaTeX
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y latexmk texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended texlive-publishers lmodern poppler-utils
+
+      - name: Compile main and supplement
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd source
+          latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
+          latexmk -pdf -interaction=nonstopmode -halt-on-error supplement.tex
+          mkdir -p ../paper
+          cp main.pdf ../paper/When_AI_Exposure_Rankings_Disagree_Main.pdf
+          cp supplement.pdf ../paper/When_AI_Exposure_Rankings_Disagree_Supplement.pdf
+          pdfunite main.pdf supplement.pdf ../paper/When_AI_Exposure_Rankings_Disagree_Main_and_Supplement.pdf
+          cd ..
+          sha256sum paper/*.pdf > GITHUB_BUILD_SHA256.txt
+
+      - name: Commit reconstructed research package
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf _bootstrap
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Build final author manuscript and reproducibility package'
+          git push
