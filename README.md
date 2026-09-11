@@ -21,7 +21,7 @@ This repository contains the submission-final author version, Supplementary Mate
 - The resulting list is for screening and further assessment, not a displacement forecast, worker-transition probability, or program-success prediction.
 
 ### Compact Consensus-Frequency benchmark
-A transparent comparator selects the 25 occupations that appear most often in the 18 scenario-specific Top-25 lists. This is an occurrence-frequency rank-aggregation benchmark, not a probability model.
+A transparent comparator selects the 25 occupations that appear most often in the 18 scenario-specific Top-25 lists. `Top_25(p^t)` is defined as the 25 occupations with the largest priorities under scenario `t`. This is an occurrence-frequency rank-aggregation benchmark, not a probability model.
 
 Verified values:
 - Mean capture: 97.00%.
@@ -29,19 +29,23 @@ Verified values:
 - Maximum relative regret: 4.11%.
 - Exact independent-box absolute regret: 0.01952.
 - Overlap with relative minimax: 24/25.
+- 25th frequency count: 9.
+- 26th frequency count: 8.
+
+The cutoff is therefore strict and no membership tie occurs at position 25. Ascending SOC is retained only as a fixed deterministic fallback tie-break for equal counts away from the cutoff.
 
 Relative minimax remains 96.99% mean capture, 96.52% minimum capture, 3.48% maximum relative regret, and 0.01945 exact box regret. The interpretation is deliberately narrow: the frequency benchmark has a marginally higher mean capture, while relative minimax provides stronger protection on the worst-case relative-capture/regret criterion it explicitly optimizes. No universal-dominance claim is made.
 
 ### Final mathematical/editorial closure
-The author version includes: exact endpoint/tie semantics for support-contraction boundaries; separate retained-width g and optional phi(alpha) reparameterization; the ordered guaranteed-set insertion argument in Theorem 1; explicit construction of the frozen modifier from exposure and five O*NET skills; a definition of the indicator function; explicit positivity of V_t* before capture normalization; exact V_k box-regret notation; complete binary constraints in the absolute-minimax sensitivity; SOC codes for the 14 coherent-stable occupations; and cleaned symbol roles for exposure-channel, selected-mass, proof-item, and support-width notation.
+The author version includes exact endpoint/tie semantics for support-contraction boundaries; separate retained-width g and optional phi(alpha) reparameterization; the ordered guaranteed-set insertion argument in Theorem 1; explicit construction of the frozen modifier from exposure and five O*NET skills; a definition of the indicator function; explicit positivity of V_t* before capture normalization; exact V_k box-regret notation; complete binary constraints in the absolute-minimax sensitivity; SOC codes for the 14 coherent-stable occupations; and cleaned symbol roles for exposure-channel, selected-mass, proof-item, and support-width notation.
 
 The nonessential underdefined SIPP diagnostic was removed rather than overinterpreted. The Main uses 30/30 references, all cited in IEEE first-appearance order. The Supplement uses 5/5 references, all cited.
 
 ### Figures
-The plots retain bold titles, axes, tick text, legends, and annotations inside four-sided frames. Manuscript captions describe only the scientific content; production-formatting instructions were removed from all three captions.
+The plots retain bold titles, axes, tick text, legends, and annotations inside four-sided frames. Manuscript captions describe only scientific content. Figure 3 now displays all four fixed-list comparisons: Scale only, Baseline composite, Consensus-Frequency, and Relative minimax.
 
 ### Reproducibility
-The `reproducibility/` directory exposes the complete consensus list, its scenario-by-scenario capture/regret ledger, machine-readable summary values, and a benchmark note. The complete downloadable author package additionally carries the frozen 661x18 priority matrix, interval/core ledger, relative-minimax selection, and deterministic benchmark script used to regenerate these outputs.
+The `reproducibility/` directory exposes the complete Consensus-Frequency list, its scenario-by-scenario capture/regret ledger, machine-readable summary values, and a benchmark note. The complete downloadable author package additionally carries the frozen 661x18 priority matrix, interval/core ledger, relative-minimax selection, and deterministic benchmark script used to regenerate these outputs.
 
 ### Current build
 - Main manuscript: 5 pages.
