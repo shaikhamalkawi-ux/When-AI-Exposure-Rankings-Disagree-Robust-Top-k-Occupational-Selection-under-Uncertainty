@@ -3,21 +3,29 @@
 - Main manuscript: 5 pages.
 - Supplement: 3 pages.
 - Combined: 8 pages.
-- Main references: 28/28 cited, with bibliography numbering matching exact first-appearance IEEE order.
+- Main references: 30/30 cited, with bibliography numbering following IEEE first-appearance order.
 - Supplement references: 5/5 cited.
 - Undefined citations/references: 0.
 - Overfull boxes: 0.
-- Main has only three benign underfull bibliography-line warnings; no clipping results from them.
-- Supplement has no underfull/overfull warnings.
 - All 8 pages rendered and visually inspected: PASS.
-- Figures: bold titles/axis labels/tick labels/annotations; all four spines visible; annotations kept within the plotting rectangle. The previously edge-adjacent `Scale only` and `g*=0.078756` labels are inside the frame.
+- Figures: bold titles, axis labels, tick labels, legends, and annotations; four-sided plotting frames; annotations remain inside the plotting rectangle. Manuscript captions contain scientific descriptions only, with production-formatting language removed.
 - PDF fonts embedded; Type-3 fonts: 0.
 - PDFs are searchable and unencrypted.
 - Author order and affiliations match the requested author version; Asem Omari and Azmi Alazzam are visibly separated.
 - Ahmed Abdelaziz Elsayed remains affiliated with Canadian University Dubai, email ahmed.elsayed@cud.ac.ae.
 - Theorem 1 proof includes the nonincreasing-lower-bound ordering argument for guaranteed-item insertion.
-- The modifier q_i^t is explicitly constructed from frozen normalized exposure, the five frozen normalized O*NET skills, and employment scale.
+- The modifier is explicitly constructed from frozen normalized exposure, five frozen normalized O*NET skills, and employment scale; the `1-h` factor is explicitly bounded as a declared screening transformation rather than a causal protective effect.
+- Indicator notation is explicitly defined and V_t* positivity is stated before capture normalization.
+- The absolute-minimax sensitivity includes the binary decision constraint explicitly.
+- Exposure-channel, selected-mass, guaranteed-proof-item, and support-width symbols have distinct roles.
+- Structural transition boundaries are explicitly denoted g* and retain the strict/non-strict equality convention.
+- Ide & Schoebel and Conde bibliographic titles/DOIs were completed; the OECD/JRC DOI was added.
 - The nonessential underdefined SIPP diagnostic was removed.
 - SOC codes are reported for all 14 stable occupations in the Supplement.
-- No reported numerical result, selected list, scenario count, optimization value, table result, or scientific conclusion changed in this closure.
+- Consensus-Frequency is included only as a compact descriptive benchmark, not a new primary contribution or probability model.
+- Consensus-Frequency verified values: mean capture 97.00%; minimum capture 95.89%; maximum relative regret 4.11%; exact box absolute regret 0.01952; overlap with relative minimax 24/25.
+- Relative-minimax locked values remain: mean capture 96.99%; minimum capture 96.52%; maximum relative regret 3.48%; exact box absolute regret 0.01945.
+- Consensus-only occupation: Hosts and Hostesses, Restaurant, Lounge, and Coffee Shop (35-9031). Relative-minimax-only occupation: Amusement and Recreation Attendants (39-3091).
+- The Consensus-Frequency cutoff is strict (9 versus 8 scenario appearances), so the deterministic SOC tie-break does not affect membership.
+- All pre-existing primary scientific results, the 661-occupation frame, 18-scenario construction, exact rank certificates, screening theorem, box-regret result, and nested-support breakpoints remain unchanged.
 - GitHub Actions final source/figure/PDF build: PASS.
