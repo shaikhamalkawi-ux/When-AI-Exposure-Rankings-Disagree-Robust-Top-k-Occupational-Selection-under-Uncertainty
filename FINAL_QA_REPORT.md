@@ -1,13 +1,23 @@
 # Final QA Report
 
-- Main manuscript: 4 pages.
+- Main manuscript: 5 pages.
 - Supplement: 3 pages.
-- Combined: 7 pages.
-- Local final LaTeX build: 0 overfull/underfull box warnings in the main; 0 undefined-reference warnings on final pass.
-- Supplement: 0 overfull/underfull box warnings; one benign float-placement h->ht warning.
-- All pages rendered and visually inspected: PASS.
-- All PDF fonts embedded; Type-3 fonts: 0.
+- Combined: 8 pages.
+- Main references: 28/28 cited, with bibliography numbering matching exact first-appearance IEEE order.
+- Supplement references: 5/5 cited.
+- Undefined citations/references: 0.
+- Overfull boxes: 0.
+- Main has only three benign underfull bibliography-line warnings; no clipping results from them.
+- Supplement has no underfull/overfull warnings.
+- All 8 pages rendered and visually inspected: PASS.
+- Figures: bold titles/axis labels/tick labels/annotations; all four spines visible; annotations kept within the plotting rectangle. The previously edge-adjacent `Scale only` and `g*=0.078756` labels are inside the frame.
+- PDF fonts embedded; Type-3 fonts: 0.
 - PDFs are searchable and unencrypted.
-- Author order and affiliations match the requested author version.
+- Author order and affiliations match the requested author version; Asem Omari and Azmi Alazzam are visibly separated.
 - Ahmed Abdelaziz Elsayed remains affiliated with Canadian University Dubai, email ahmed.elsayed@cud.ac.ae.
-- No reported numerical result was changed by the mathematical/notation closure or applied repositioning.
+- Theorem 1 proof includes the nonincreasing-lower-bound ordering argument for guaranteed-item insertion.
+- The modifier q_i^t is explicitly constructed from frozen normalized exposure, the five frozen normalized O*NET skills, and employment scale.
+- The nonessential underdefined SIPP diagnostic was removed.
+- SOC codes are reported for all 14 stable occupations in the Supplement.
+- No reported numerical result, selected list, scenario count, optimization value, table result, or scientific conclusion changed in this closure.
+- GitHub Actions final source/figure/PDF build: PASS.
