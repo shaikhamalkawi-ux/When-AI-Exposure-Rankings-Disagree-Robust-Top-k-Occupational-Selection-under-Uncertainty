@@ -1,6 +1,6 @@
 # When AI Exposure Rankings Disagree: Robust Top-25 Selection Across 661 U.S. Occupations
 
-This repository accompanies the paper **“When AI Exposure Rankings Disagree: Robust Top-25 Selection Across 661 U.S. Occupations.”**
+This repository accompanies the applied author version of the CAISAIS 2026 paper. The scientific numerical results remain those of the locked V6R1 lineage; this production pass improves application framing, author metadata, and exact mathematical/notation wording without changing the 661-occupation dataset, 18-scenario matrix, selected lists, solver results, or headline conclusions.
 
 ## Authors
 
@@ -13,7 +13,7 @@ This repository accompanies the paper **“When AI Exposure Rankings Disagree: R
 
 ## Applied question
 
-AI-exposure measures can disagree about which occupations should receive priority. This study asks which occupations remain Top-25 priorities across the admitted AI-exposure specifications and, when one fixed Top-25 list is required, which list best protects worst-case priority capture.
+AI-exposure measures can disagree about which occupations should receive priority. The paper asks which occupations remain Top-25 priorities across admitted AI-exposure specifications and, when one fixed Top-25 list is required, which list best protects worst-case priority capture.
 
 The application covers **661 U.S. occupations** and **18 coherent AI-exposure specifications**.
 
@@ -29,26 +29,38 @@ The application covers **661 U.S. occupations** and **18 coherent AI-exposure sp
 - Baseline exact independent-box absolute regret: **0.0181**.
 - Relative-minimax exact independent-box absolute regret: **0.0195**.
 
-Robustness therefore depends on both the uncertainty structure and the decision criterion.
-
 ## Exact transition-boundary convention
 
-Best rank uses the strict comparison `ell_j > u_i`, whereas pessimistic worst rank uses the non-strict comparison `u_j >= ell_i`. Each reported retained-width value `g*` is therefore a **transition boundary**. When contraction proceeds from `g = 1` toward `g = 0`, the associated post-contraction membership state applies immediately below the boundary (`g < g*`).
+Best rank uses the strict comparison `ell_j > u_i`, while pessimistic worst rank uses the non-strict comparison `u_j >= ell_i`. Reported retained-width values `g*` are therefore treated as **transition boundaries**. Post-contraction membership statements are evaluated immediately below a boundary (`g < g*`) rather than treating a rounded breakpoint as an interior state.
 
-An auxiliary path parameter is written `g = phi(alpha)`, with `phi` a strictly decreasing endpoint-preserving homeomorphism. It is not interpreted as a probability or confidence level.
+The auxiliary path parameter is written `g = phi(alpha)`, where `phi:[0,1]->[0,1]` is a strictly decreasing endpoint-preserving homeomorphism. It is not a probability or confidence level.
+
+## Stable occupations across all 18 coherent Top-25 lists
+
+General and Operations Managers; Accountants and Auditors; Registered Nurses; Waiters and Waitresses; Janitors and Cleaners, Except Maids and Housekeeping Cleaners; Cashiers; Retail Salespersons; Sales Representatives, Wholesale and Manufacturing, Except Technical and Scientific Products; Bookkeeping, Accounting, and Auditing Clerks; Receptionists and Information Clerks; Secretaries and Administrative Assistants, Except Legal, Medical, and Executive; Office Clerks, General; Heavy and Tractor-Trailer Truck Drivers; Stockers and Order Fillers.
 
 ## Repository contents
 
-- `paper/When_AI_Exposure_Rankings_Disagree_Main.pdf` — author version of the main paper.
-- `paper/When_AI_Exposure_Rankings_Disagree_Supplement.pdf` — supplementary material.
+- `paper/When_AI_Exposure_Rankings_Disagree_Main.pdf` — compiled main paper.
+- `paper/When_AI_Exposure_Rankings_Disagree_Supplement.pdf` — compiled Supplementary Material.
+- `paper/When_AI_Exposure_Rankings_Disagree_Main_and_Supplement.pdf` — combined paper and supplement.
 - `source/main.tex` and `source/supplement.tex` — LaTeX sources.
-- `source/fig1_membership.png`, `source/fig2_contraction.png`, `source/fig3_tradeoff.png` — figures used in the manuscript.
-- `MATH_AND_NOTATION_CHANGES.md` — mathematical/notation correction record.
-- `FINAL_QA_REPORT.md` — production audit record.
+- `source/figures/` — reproducibly generated figures.
+- `reproducibility/` — retained 661x18 matrix, interval/core ledger, executable code, generated/reference outputs, environment metadata, and checksums.
+- `MATH_AND_NOTATION_CHANGES.md` — exact correction record.
+- `FINAL_QA_REPORT.md` — mathematical and production audit.
+- `CITATION.cff` — repository citation metadata.
 
-## Reproducibility boundary
+## Reproduction
 
-The paper describes a 661×18 primitive priority matrix, interval/core ledger, selected-list outputs, scenario-level capture/regret calculations, and solver metadata. The authoritative empirical calculation archive is not reconstructed from headline values here. It should be added only from the retained source archive so that no row-level object is reverse-engineered from published summaries.
+From the `reproducibility` directory run:
+
+```bash
+python reproduce_beyondair.py
+python reproduce_beyondair.py --unscreened
+```
+
+In the verification run used for this author build, the theorem-equivalent screened and full 661-binary formulations both returned zero reported MIP gap and the same 25-member relative-minimax list. The objectives were `0.03476246751512021` and `0.03476246751512037`, respectively.
 
 ## Interpretation boundary
 
